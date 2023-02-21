@@ -1,26 +1,63 @@
-<template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js App" />
-</template>
-
+<!-- eslint-disable prettier/prettier -->
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import Background from './containers/Background.vue';
+import MainModule from './containers/MainModule.vue';
 
 export default {
   name: "App",
   components: {
-    HelloWorld,
+    Background,
+    MainModule,
   },
+  data() {
+    return {
+      checked1: false,
+    }
+  },
+  computed: {
+    count() {
+      return this.$store.state.count;
+    }
+  },
+  methods: {
+    increment() {
+      this.$store.commit('increment');
+    }
+  }
 };
 </script>
 
+<template>
+  <div class="main-container">
+    <MainModule />
+    <Background />
+  </div>
+</template>
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+.main-container {
+  min-width: 99vw;
+  min-height: 99.5vh;
+  max-height: 99.5vh;
+  max-width: 99vw;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+#test {
+  border: 1px solid black;
+  height: 30%;
+}
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 </style>
