@@ -2,30 +2,41 @@
 /* eslint-disable */
 import axios from 'axios';
 import SearchInput from '@/components/Search.vue';
+
+import { mapState } from 'vuex';
+import CardsContainer from './CardsContainer.vue';
 export default {
   name: "MainModule",
   components: {
     SearchInput,
+    CardsContainer
+},
+  computed: {
+  ...mapState(['weatherCards']),
+  length() {
+      return this.weatherCards.length;
+    },
   },
-  data() {
-    return {
-      inputValue: "",
-      loading: false,
-    }
+  watch: {
+    weatherCards: {
+      handler(newValue, oldValue) {
+        console.log('weatherCards changed from ', oldValue, ' to ', newValue);
+      },
+      deep: true,
+    },
   },
 };
 </script>
 
 <template>
   <h1>WeatherVue</h1>
-  <div class="module">
-    <!-- <span class="p-input-icon-left">
-      <i class="pi pi-search" />
-      <InputText class="p-inputtext-lg" placeholder="Type in a city, address, or zip-code to get started" v-model="inputValue" @keyup.enter="HandleEnter">
-      </InputText>
-    </span> -->
-    <SearchInput />
+  <div v-if="length < 1" class="search module">
+      <SearchInput />
   </div>
+  <div v-if="length > 0" class="cards module">
+    <CardsContainer />
+  </div>
+  
 </template>
 
 <style>
@@ -38,6 +49,12 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  transition: height 0.2s linear;
+}
+
+.cards {
+  height: 50vh !important;
+  transition: height 0.2s linear;
 }
 .p-card-header {
   font-size: 3.5rem;

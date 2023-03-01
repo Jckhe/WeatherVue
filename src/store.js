@@ -12,6 +12,7 @@ const store = createStore({
       state.count++;
     },
     addWeatherCard(state, card) {
+      console.log("checking card in store: ", card);
       state.weatherCards.push(card);
       console.log("state: " + state.weatherCards);
     },

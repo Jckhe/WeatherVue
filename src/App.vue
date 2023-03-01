@@ -3,6 +3,7 @@
 import Background from './containers/Background.vue';
 import MainModule from './containers/MainModule.vue';
 
+
 export default {
   name: "App",
   components: {

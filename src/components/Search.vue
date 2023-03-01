@@ -22,7 +22,12 @@ export default {
       try {
         const coordinates = await this.getCoordinates();
         const weatherData = await this.getWeather(coordinates);
-        this.currentTemp = weatherData.current.temp;
+        // create weathercard object here
+        const weatherCard = {
+          cityName: coordinates.cityName,
+          data: weatherData,
+        };
+        this.createWeatherCard(weatherCard);
       } catch (error) {
         console.error(error);
         this.toggleLoading();
@@ -39,16 +44,19 @@ export default {
       console.log("get coord results: ", response);
       const coordinates =
         response.data.response.features[0].geometry.coordinates;
+      const cityName = response.data.response.features[0].properties.locality;
       const lng = coordinates[0];
       const lat = coordinates[1];
-      return { lat, lng };
+      return { lat, lng, cityName };
     },
     async getWeather({ lat, lng }) {
       const response = await axios.get(
         `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lng}&exclude={part}&units=imperial&appid=${process.env.VUE_APP_WEATHER_API_KEY}`
       );
-      console.log("data: ", response.data);
       return response.data;
+    },
+    createWeatherCard(data) {
+      this.$store.commit("addWeatherCard", data);
     },
     toggleLoading() {
       this.loading = !this.loading;
