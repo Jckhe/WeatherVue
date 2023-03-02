@@ -1,6 +1,7 @@
 <script>
 import axios from "axios";
 import LoadingIndicator from "../assets/icons/LoadingIndicator.svg";
+// import { mapState } from "vuex";
 export default {
   name: "SearchInput",
   data() {
@@ -10,6 +11,18 @@ export default {
       isFocused: false,
     };
   },
+  // computed: {
+  //   ...mapState(["weatherCards"]),
+  // },
+  // watch: {
+  //   weatherCards: {
+  //     handler() {
+  //       console.log("force update?1");
+  //       this.$forceUpdate();
+  //     },
+  //     deep: true,
+  //   },
+  // },
   props: {
     LoadingIndicator: {
       type: String,
@@ -25,6 +38,7 @@ export default {
         // create weathercard object here
         const weatherCard = {
           cityName: coordinates.cityName,
+          stateName: coordinates.stateName,
           data: weatherData,
         };
         this.createWeatherCard(weatherCard);
@@ -45,9 +59,10 @@ export default {
       const coordinates =
         response.data.response.features[0].geometry.coordinates;
       const cityName = response.data.response.features[0].properties.locality;
+      const stateName = response.data.response.features[0].properties.region_a;
       const lng = coordinates[0];
       const lat = coordinates[1];
-      return { lat, lng, cityName };
+      return { lat, lng, cityName, stateName };
     },
     async getWeather({ lat, lng }) {
       const response = await axios.get(

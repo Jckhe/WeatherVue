@@ -6,6 +6,10 @@ export default {
       type: String,
       required: true,
     },
+    stateName: {
+      type: String,
+      required: true,
+    },
   },
 };
 </script>
@@ -13,7 +17,7 @@ export default {
 <template>
   <div class="weather-card-container">
     <div class="city-name-container">
-      <h1 class="city-name-header">{{ cityName }}</h1>
+      <h1 class="city-name-header">{{ cityName }}, {{ stateName }}</h1>
     </div>
   </div>
 </template>

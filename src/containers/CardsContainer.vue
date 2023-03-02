@@ -11,6 +11,18 @@ export default {
   computed: {
     ...mapState(["weatherCards"]),
   },
+  watch: {
+    weatherCards: {
+      handler() {
+        console.log(this.weatherCards.length);
+        this.$nextTick(() => {
+          //goes to the last slide AFTER a new weathercard has been added.
+          this.$refs.carousel.goTo(this.weatherCards.length - 1, false);
+        });
+      },
+      deep: true,
+    },
+  },
   setup() {
     const onChange = (current) => {
       console.log(current);
@@ -25,10 +37,15 @@ export default {
 
 <template>
   <div class="carousel-container">
-    <a-carousel>
+    <a-carousel
+      :key="weatherCards.length"
+      ref="carousel"
+      :after-change="onChange"
+    >
       <WeatherCard
         v-for="(item, index) in weatherCards"
         :cityName="item.cityName"
+        :stateName="item.stateName"
         :key="index"
       />
       <div id="search-carousel">
