@@ -42,7 +42,7 @@ export default {
 <style>
 .module {
   border: 1px solid white;
-  height: 33vh;
+  height:33vh ;
   width: 33vw;
   background-color: rgba(50, 50, 50, 0.75) !important;
   display: flex;
@@ -53,7 +53,7 @@ export default {
 }
 
 .cards {
-  height: 55vh !important;
+  height: 65vh !important;
   transition: height 0.2s linear;
 }
 .p-card-header {

@@ -22,7 +22,7 @@
             "wind_gust": 1.01,
             "weather": [
                 {
-                    "id": 202,
+                    "id": 500,
                     "main": "Clouds",
                     "description": "overcast clouds",
                     "icon": "04d"
