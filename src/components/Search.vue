@@ -32,16 +32,18 @@ export default {
   methods: {
     async handleEnter() {
       this.toggleLoading();
+      let weatherCard = {};
       try {
         const coordinates = await this.getCoordinates();
         const weatherData = await this.getWeather(coordinates);
         // create weathercard object here
-        const weatherCard = {
+        weatherCard = {
           cityName: coordinates.cityName,
           stateName: coordinates.stateName,
           data: weatherData,
         };
         this.createWeatherCard(weatherCard);
+        //store weather card in local storage
       } catch (error) {
         console.error(error);
         this.toggleLoading();

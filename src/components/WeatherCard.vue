@@ -44,7 +44,7 @@ export default {
     },
     currentTemperature() {
       console.log("current temp: ", this.weatherData.current.temp);
-      return this.weatherData.current.temp;
+      return `${this.weatherData.current.temp}° F`;
     },
     titleStyle() {
       return {
@@ -70,13 +70,18 @@ export default {
   >
     <a-card
       class="current-weather-container"
+      hoverable
       :headStyle="titleStyleNoBorder"
-      :bordered="true"
+      :bordered="false"
     >
       <div class="inner-current-weather-container">
         <!-- <img :src="getWeatherSvg(weatherCode)" alt="Image" /> -->
         <h3>{{ weatherDescription }}</h3>
-        <a-avatar :src="getWeatherSvg(weatherCode)" :size="128" />
+        <a-avatar
+          :src="getWeatherSvg(weatherCode)"
+          :size="128"
+          shape="square"
+        />
         <h3>{{ currentTemperature }}</h3>
       </div>
     </a-card>
@@ -95,10 +100,15 @@ export default {
 
 .current-weather-container {
   background-color: transparent !important;
+  border: 1px solid grey;
 }
 
 .inner-current-weather-container {
-  border: 1px solid blue;
+  /* border: 1px solid blue; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5vh;
 }
 
 .inner-current-weather-container h3 {
