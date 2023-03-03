@@ -46,6 +46,7 @@ export default {
         v-for="(item, index) in weatherCards"
         :cityName="item.cityName"
         :stateName="item.stateName"
+        :weatherData="item.data"
         :key="index"
       />
       <div id="search-carousel">
