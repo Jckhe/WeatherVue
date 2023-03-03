@@ -2,7 +2,7 @@
 <script>
 import Background from './containers/Background.vue';
 import MainModule from './containers/MainModule.vue';
-
+import axios from 'axios';
 
 export default {
   name: "App",
@@ -21,10 +21,35 @@ export default {
     }
   },
   methods: {
-    increment() {
-      this.$store.commit('increment');
-    }
+    async getWeather({ lat, lng }) {
+      const response = await axios.get(
+        `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lng}&exclude={part}&units=imperial&appid=${process.env.VUE_APP_WEATHER_API_KEY}`
+      );
+      return response.data;
+    },
+    createWeatherCard(data) {
+      this.$store.commit("addWeatherCard", data);
+    },
+  },
+  beforeMount() {
+  // Retrieve weatherCards data from localStorage if it exists
+  const weatherCards = localStorage.getItem('weatherCards');
+  if (weatherCards) {
+    const parsedWeatherCards = JSON.parse(weatherCards);
+    console.log("Exists: ", parsedWeatherCards);
+    parsedWeatherCards.forEach( async (card) => {
+      console.log("Card: ", card);
+      let weatherData = await this.getWeather(card.coordinates)
+      console.log("weatherData: ", weatherData)
+      let weatherCard = {
+          cityName: card.coordinates.cityName,
+          stateName: card.coordinates.stateName,
+          data: weatherData,
+        };
+      this.createWeatherCard(weatherCard);
+    });
   }
+}
 };
 </script>
 

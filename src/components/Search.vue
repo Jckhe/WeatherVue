@@ -44,6 +44,13 @@ export default {
         };
         this.createWeatherCard(weatherCard);
         //store weather card in local storage
+        let weatherCardsLocalStorage =
+          JSON.parse(localStorage.getItem("weatherCards")) || [];
+        weatherCardsLocalStorage.push({ coordinates });
+        localStorage.setItem(
+          "weatherCards",
+          JSON.stringify(weatherCardsLocalStorage)
+        );
       } catch (error) {
         console.error(error);
         this.toggleLoading();
