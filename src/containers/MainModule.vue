@@ -53,7 +53,7 @@ export default {
 }
 
 .cards {
-  height: 50vh !important;
+  height: 55vh !important;
   transition: height 0.2s linear;
 }
 .p-card-header {
