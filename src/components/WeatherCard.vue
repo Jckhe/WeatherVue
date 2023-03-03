@@ -2,6 +2,9 @@
 import Cloudy from "../assets/icons/weather/cloudy.svg";
 import CloudyWithSun from "../assets/icons/weather/cloudy-with-sun.svg";
 import Clear from "../assets/icons/weather/clear.svg";
+import ThunderLow from "../assets/icons/weather/thunderlow.svg";
+import ThunderMid from "../assets/icons/weather/thundermid.svg";
+import ThunderHigh from "../assets/icons/weather/thunderhigh.svg";
 export default {
   name: "WeatherCard",
   props: {
@@ -21,12 +24,29 @@ export default {
   methods: {
     getWeatherSvg(weatherCode) {
       switch (weatherCode) {
+        case 200:
+        case 201:
+        case 202:
+          return ThunderLow;
+        case 210:
+        case 211:
+        case 212:
+          return ThunderMid;
+        case 221:
+        case 230:
+        case 231:
+        case 232:
+          return ThunderHigh;
         case 800:
           return Clear;
-        case 803 || 804:
+        case 803:
+        case 804:
           return Cloudy;
-        case 801 || 802:
+        case 801:
+        case 802:
           return CloudyWithSun;
+        default:
+          return;
       }
     },
   },
@@ -101,6 +121,7 @@ export default {
 .current-weather-container {
   background-color: transparent !important;
   border: 1px solid grey;
+  border-radius: 15%;
 }
 
 .inner-current-weather-container {

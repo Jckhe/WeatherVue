@@ -1,10 +1,11 @@
 import { createStore } from "vuex";
+import TestObject from "./test.json";
 
 const store = createStore({
   state() {
     return {
       count: 0,
-      weatherCards: [],
+      weatherCards: [TestObject],
     };
   },
   mutations: {
