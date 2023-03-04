@@ -16,6 +16,12 @@ export default {
   length() {
       return this.weatherCards.length;
     },
+  currentDate() {
+    const date = new Date();
+    const options = { year: "numeric", month: "short", day: "numeric" };
+    const formattedDate = date.toLocaleDateString("en-US", options);
+    return formattedDate;
+  },
   },
   watch: {
     weatherCards: {
@@ -30,6 +36,7 @@ export default {
 
 <template>
   <h1>WeatherVue</h1>
+  <h3>{{ currentDate }}</h3>
   <div v-if="length < 1" class="search module">
       <SearchInput />
   </div>
@@ -42,8 +49,10 @@ export default {
 <style>
 .module {
   border: 1px solid white;
-  height:33vh ;
+  height: 33vh;
   width: 33vw;
+  position: relative;
+  bottom: 5.5vh;
   background-color: rgba(50, 50, 50, 0.75) !important;
   display: flex;
   flex-direction: column;
@@ -53,7 +62,7 @@ export default {
 }
 
 .cards {
-  height: 65vh !important;
+  height: 75vh !important;
   transition: height 0.2s linear;
 }
 .p-card-header {
