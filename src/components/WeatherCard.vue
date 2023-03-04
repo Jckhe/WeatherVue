@@ -49,6 +49,10 @@ export default {
       console.log("current temp: ", this.weatherData.current.temp);
       return `${this.weatherData.current.temp}° F`;
     },
+    hourlyWeatherData() {
+      console.log("hourly:", this.weatherData.hourly);
+      return this.weatherData.hourly;
+    },
     titleStyle() {
       return {
         color: "white",
@@ -134,11 +138,16 @@ export default {
         <!-- Hourly weather content goes here -->
         <a-card
           class="hourly-weather-container"
-          hoverable
           :headStyle="titleStyleNoBorder"
           :bordered="false"
         >
-          <HourlyWeatherCard :weatherData="testData" />
+          <div class="inner-hourly-container">
+            <HourlyWeatherCard
+              v-for="(item, index) in hourlyWeatherData"
+              :weatherData="item"
+              :key="index"
+            />
+          </div>
         </a-card>
       </a-tab-pane>
       <a-tab-pane key="daily" tab="Daily">
@@ -180,6 +189,15 @@ export default {
 
 .inner-current-weather-container h3 {
   color: white;
+}
+
+.inner-hourly-container {
+  border: 1px solid green;
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: row;
+  overflow-x: scroll;
 }
 
 .ant-tabs-nav {
