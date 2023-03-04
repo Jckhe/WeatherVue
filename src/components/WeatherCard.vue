@@ -145,6 +145,7 @@ export default {
             <HourlyWeatherCard
               v-for="(item, index) in hourlyWeatherData"
               :weatherData="item"
+              :timestamp="item.dt"
               :key="index"
             />
           </div>
