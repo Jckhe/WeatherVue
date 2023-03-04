@@ -1,15 +1,12 @@
 <script>
-import Cloudy from "../assets/icons/weather/cloudy.svg";
-import CloudyWithSun from "../assets/icons/weather/cloudy-with-sun.svg";
-import Clear from "../assets/icons/weather/clear.svg";
-import ThunderLow from "../assets/icons/weather/thunderlow.svg";
-import ThunderMid from "../assets/icons/weather/thundermid.svg";
-import ThunderHigh from "../assets/icons/weather/thunderhigh.svg";
-import RainLow from "../assets/icons/weather/rainlow.svg";
-import RainMid from "../assets/icons/weather/rainmid.svg";
-import RainHigh from "../assets/icons/weather/rainhigh.svg";
+import HourlyWeatherCard from "./HourlyWeatherCard.vue";
+import { getWeatherSvg } from "@/helper/getWeatherSvg";
+import { weatherSVG } from "@/helper/weatherSvg";
 export default {
   name: "WeatherCard",
+  components: {
+    HourlyWeatherCard,
+  },
   props: {
     cityName: {
       type: String,
@@ -25,45 +22,8 @@ export default {
     },
   },
   methods: {
-    getWeatherSvg(weatherCode) {
-      switch (weatherCode) {
-        case 200:
-        case 201:
-        case 202:
-          return ThunderLow;
-        case 210:
-        case 211:
-        case 212:
-          return ThunderMid;
-        case 221:
-        case 230:
-        case 231:
-        case 232:
-          return ThunderHigh;
-        case 500:
-        case 501:
-        case 520:
-          return RainLow;
-        case 502:
-        case 503:
-        case 521:
-          return RainMid;
-        case 504:
-        case 511:
-        case 522:
-        case 531:
-          return RainHigh;
-        case 800:
-          return Clear;
-        case 803:
-        case 804:
-          return Cloudy;
-        case 801:
-        case 802:
-          return CloudyWithSun;
-        default:
-          return;
-      }
+    setWeatherSvg(weatherCode) {
+      return weatherSVG(getWeatherSvg(weatherCode));
     },
   },
   computed: {
@@ -100,6 +60,34 @@ export default {
         border: "none",
       };
     },
+    testData() {
+      return {
+        dt: 1677690000,
+        temp: 50.72,
+        feels_like: 48.78,
+        pressure: 1009,
+        humidity: 70,
+        dew_point: 41.31,
+        uvi: 1.08,
+        clouds: 89,
+        visibility: 10000,
+        wind_speed: 15.66,
+        wind_deg: 254,
+        wind_gust: 21.88,
+        weather: [
+          {
+            id: 500,
+            main: "Rain",
+            description: "light rain",
+            icon: "10d",
+          },
+        ],
+        pop: 1,
+        rain: {
+          "1h": 0.12,
+        },
+      };
+    },
   },
 };
 </script>
@@ -111,33 +99,59 @@ export default {
     :bordered="false"
     class="weather-card-container"
   >
-    <a-card
-      class="current-weather-container"
-      hoverable
-      :headStyle="titleStyleNoBorder"
-      :bordered="false"
+    <a-tabs
+      v-model:selectedTab="current"
+      :tabBarStyle="{
+        display: 'flex',
+        justifyContent: 'center',
+        width: '49.5%',
+        alignSelf: 'center',
+        padding: '2.5%',
+        color: 'white',
+        // border: '1px solid red',
+      }"
     >
-      <div class="inner-current-weather-container">
-        <!-- <img :src="getWeatherSvg(weatherCode)" alt="Image" /> -->
-        <h3>{{ weatherCondition }}</h3>
-        <a-avatar
-          :src="getWeatherSvg(weatherCode)"
-          :size="128"
-          shape="square"
-        />
-        <h3>{{ currentTemperature }}</h3>
-        <h3>
-          {{ weatherDescription }}
-        </h3>
-      </div>
-    </a-card>
+      <a-tab-pane key="current" tab="Current">
+        <a-card
+          class="current-weather-container"
+          hoverable
+          :headStyle="titleStyleNoBorder"
+          :bordered="false"
+        >
+          <div class="inner-current-weather-container">
+            <h3>{{ weatherCondition }}</h3>
+            <a-avatar
+              :src="setWeatherSvg(weatherCode)"
+              :size="128"
+              shape="square"
+            />
+            <h3>{{ currentTemperature }}</h3>
+            <h3>{{ weatherDescription }}</h3>
+          </div>
+        </a-card>
+      </a-tab-pane>
+      <a-tab-pane key="hourly" tab="Hourly">
+        <!-- Hourly weather content goes here -->
+        <a-card
+          class="hourly-weather-container"
+          hoverable
+          :headStyle="titleStyleNoBorder"
+          :bordered="false"
+        >
+          <HourlyWeatherCard :weatherData="testData" />
+        </a-card>
+      </a-tab-pane>
+      <a-tab-pane key="daily" tab="Daily">
+        <!-- Hourly weather content goes here -->
+      </a-tab-pane>
+    </a-tabs>
   </a-card>
 </template>
 
 <style>
 .weather-card-container {
   background-color: transparent !important;
-  height: 65vh;
+  height: 73vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -145,6 +159,12 @@ export default {
 }
 
 .current-weather-container {
+  background-color: transparent !important;
+  border: 1px solid grey;
+  border-radius: 15%;
+}
+
+.hourly-weather-container {
   background-color: transparent !important;
   border: 1px solid grey;
   border-radius: 15%;
@@ -160,5 +180,9 @@ export default {
 
 .inner-current-weather-container h3 {
   color: white;
+}
+
+.ant-tabs-nav {
+  color: white !important;
 }
 </style>
