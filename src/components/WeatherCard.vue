@@ -2,10 +2,13 @@
 import HourlyWeatherCard from "./HourlyWeatherCard.vue";
 import { getWeatherSvg } from "@/helper/getWeatherSvg";
 import { weatherSVG } from "@/helper/weatherSvg";
+import { DoubleLeftOutlined, DoubleRightOutlined } from "@ant-design/icons-vue";
 export default {
   name: "WeatherCard",
   components: {
     HourlyWeatherCard,
+    DoubleLeftOutlined,
+    DoubleRightOutlined,
   },
   props: {
     cityName: {
@@ -24,6 +27,20 @@ export default {
   methods: {
     setWeatherSvg(weatherCode) {
       return weatherSVG(getWeatherSvg(weatherCode));
+    },
+    scrollLeft() {
+      const hourlyContainer = document.querySelector(".inner-hourly-container");
+      hourlyContainer.scrollBy({
+        left: -100,
+        behavior: "smooth",
+      });
+    },
+    scrollRight() {
+      const hourlyContainer = document.querySelector(".inner-hourly-container");
+      hourlyContainer.scrollBy({
+        left: 100,
+        behavior: "smooth",
+      });
     },
   },
   computed: {
@@ -141,11 +158,20 @@ export default {
           :headStyle="titleStyleNoBorder"
           :bordered="false"
         >
+          <div class="scroll-buttons">
+            <a-button @click="scrollLeft"
+              ><template #icon><double-left-outlined /></template
+            ></a-button>
+            <a-button @click="scrollRight"
+              ><template #icon><double-right-outlined /></template
+            ></a-button>
+          </div>
           <div class="inner-hourly-container">
             <HourlyWeatherCard
               v-for="(item, index) in hourlyWeatherData"
               :weatherData="item"
               :timestamp="item.dt"
+              :temperature="item.temp"
               :key="index"
             />
           </div>
@@ -178,6 +204,9 @@ export default {
   background-color: transparent !important;
   border: 1px solid grey;
   border-radius: 15%;
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
 }
 
 .inner-current-weather-container {
@@ -195,10 +224,29 @@ export default {
 .inner-hourly-container {
   border: 1px solid green;
   width: 100%;
-  min-height: 100%;
+  min-height: 27vh;
+  max-height: 100%;
+  gap: 1vh;
   display: flex;
   flex-direction: row;
-  overflow-x: scroll;
+  overflow-x: auto !important;
+  overflow-y: hidden;
+  justify-content: center;
+}
+
+.hourly-cards {
+  display: flex;
+  flex-direction: row;
+}
+
+.scroll-buttons {
+  border: 1px solid grey;
+  width: 25%;
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  gap: 20%;
+  padding: 1%;
 }
 
 .ant-tabs-nav {

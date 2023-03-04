@@ -12,6 +12,10 @@ export default {
       type: Number,
       required: true,
     },
+    temperature: {
+      type: Number,
+      required: true,
+    },
   },
   computed: {
     formattedTime() {
@@ -34,6 +38,9 @@ export default {
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
         .join(" ");
     },
+    formattedTemperature() {
+      return `${this.temperature}° F`;
+    },
   },
   methods: {
     setWeatherSvg(weatherCode) {
@@ -47,6 +54,7 @@ export default {
   <div class="hourly-weather-card-container">
     <span>{{ formattedTime }}</span>
     <a-avatar :src="setWeatherSvg(weatherCode)" :size="50" shape="square" />
+    <span>{{ formattedTemperature }}</span>
     <span>{{ weatherDescription }}</span>
   </div>
 </template>
@@ -54,8 +62,8 @@ export default {
 <style>
 .hourly-weather-card-container {
   border: 1px solid rgb(255, 255, 255);
-  min-height: 17.5vh;
-  max-height: 17.5vh;
+  min-height: 18.5vh;
+  max-height: 18.5vh;
   max-width: 6.5vw;
   min-width: 6.5vw;
   padding: 1%;
