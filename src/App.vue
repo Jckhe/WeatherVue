@@ -20,6 +20,9 @@ export default {
       return this.$store.state.count;
     }
   },
+  mounted() {
+    document.title = 'WeatherVue | Jckhe';
+  },
   methods: {
     async getWeather({ lat, lng }) {
       const response = await axios.get(
