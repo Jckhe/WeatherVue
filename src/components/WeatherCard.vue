@@ -202,6 +202,13 @@ export default {
       </a-tab-pane>
       <a-tab-pane key="daily" tab="Daily">
         <!-- Hourly weather content goes here -->
+        <div class="carousel-daily-container">
+          <a-empty>
+            <template #description>
+              <span style="color: white"> Under Construction! - Jackie </span>
+            </template>
+          </a-empty>
+        </div>
       </a-tab-pane>
     </a-tabs>
   </a-card>
@@ -210,7 +217,7 @@ export default {
 <style>
 .weather-card-container {
   background-color: transparent !important;
-  height: 75vh;
+  height: 74vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -226,7 +233,7 @@ export default {
 
 .hourly-weather-container {
   background-color: transparent !important;
-  border: 1px solid grey;
+  border: 0.5px solid rgba(128, 128, 128, 0.5);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -246,14 +253,14 @@ export default {
 }
 
 .carousel-hourly-outer-container {
-  border: 1px solid red;
+  margin-top: 1%;
   min-width: 27.5vw;
   max-width: 27.5vw;
-  padding: 5%;
+  padding: 3%;
 }
 
 .carousel-hourly-container {
-  border: 1px solid green;
+  border: 1px solid rgb(75, 75, 75);
   width: 100%;
   min-height: 27vh;
   gap: 1vh;
@@ -264,6 +271,16 @@ export default {
   align-items: center;
   padding-left: 1vw;
   padding-right: 1vw;
+}
+
+.carousel-daily-container {
+  border: 1px solid rgb(75, 75, 75);
+  width: 100%;
+  min-height: 27vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .hourly-cards {
@@ -280,9 +297,16 @@ export default {
   padding: 1%;
 }
 
+.scroll-buttons button {
+  width: 12.5%;
+}
+
 .min-max-container {
-  border: 1px solid rgba(190, 190, 190, 0.6);
   display: flex;
+  padding-left: 5%;
+  padding-right: 5%;
+  position: relative;
+  bottom: 1vh;
   flex-direction: row;
   justify-content: space-between;
   width: 55%;
