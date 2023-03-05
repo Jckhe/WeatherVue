@@ -1,0 +1,8 @@
+@font-face {
+  font-family: 'rubikregular';
+  src: url('./assets/fonts/Rubik-Regular.woff2') format('woff2'),
+       url('./assets/fonts/Rubik-Regular.woff') format('woff'),
+       url('./assets/fonts/Rubik-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}

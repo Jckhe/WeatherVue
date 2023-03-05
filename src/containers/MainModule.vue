@@ -35,7 +35,7 @@ export default {
 </script>
 
 <template>
-  <h1>WeatherVue</h1>
+  <h1 class="main-header">WeatherVue</h1>
   <h3>{{ currentDate }}</h3>
   <div v-if="length < 1" class="search module">
       <SearchInput />
@@ -67,5 +67,11 @@ export default {
 }
 .p-card-header {
   font-size: 3.5rem;
+}
+
+.main-header {
+  font-family: "rubikregular";
+  color: white;
+  font-size: 2rem;
 }
 </style>
