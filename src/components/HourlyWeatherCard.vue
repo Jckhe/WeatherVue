@@ -26,7 +26,9 @@ export default {
         timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       };
       const dateTime = new Date(this.timestamp * 1000);
-      const formattedTime = dateTime.toLocaleString("en-US", options);
+      const formatter = new Intl.DateTimeFormat("en-US", options);
+      const formattedTime = formatter.format(dateTime);
+      console.log("formatted time: ", formattedTime);
       return formattedTime;
     },
     weatherCode() {
@@ -55,22 +57,26 @@ export default {
     <span>{{ formattedTime }}</span>
     <a-avatar :src="setWeatherSvg(weatherCode)" :size="50" shape="square" />
     <span>{{ formattedTemperature }}</span>
-    <span>{{ weatherDescription }}</span>
+    <span class="weather-description">{{ weatherDescription }}</span>
   </div>
 </template>
 
 <style>
 .hourly-weather-card-container {
   border: 1px solid rgb(255, 255, 255);
-  min-height: 18.5vh;
-  max-height: 18.5vh;
-  max-width: 6.5vw;
-  min-width: 6.5vw;
+  min-height: 22.5vh;
+  max-height: 22.5vh;
+  min-width: 25%;
+  max-width: 25%;
   padding: 1%;
   color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
+}
+
+.weather-description {
+  line-height: 85%;
 }
 </style>
