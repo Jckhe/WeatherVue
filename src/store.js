@@ -1,18 +1,10 @@
 import { createStore } from "vuex";
 import TestObject from "./test.json";
 
-if (process.env.NODE_ENV === "production") {
-  // do something specific to production mode
-  console.log("Production mode");
-} else {
-  // do something specific to development mode
-  console.log("Development mode");
-}
-
 const store = createStore({
   state() {
     return {
-      weatherCards: [TestObject],
+      weatherCards: [],
     };
   },
   mutations: {
@@ -23,5 +15,9 @@ const store = createStore({
     },
   },
 });
+
+if (process.env.NODE_ENV === "development") {
+  store.state.weatherCards.push(TestObject);
+}
 
 export default store;
