@@ -35,7 +35,10 @@ export default {
 </script>
 
 <template>
-  <h1 class="main-header">WeatherVue</h1>
+  <div class="header-container">
+    <h1 class="main-header">Weather</h1>
+    <h1 class="main-header" style="color: #3eaf7c">Vue</h1>
+  </div>
   <h3>{{ currentDate }}</h3>
   <div v-if="length < 1" class="search module">
       <SearchInput />
@@ -67,6 +70,11 @@ export default {
 }
 .p-card-header {
   font-size: 3.5rem;
+}
+
+.header-container {
+  display: flex;
+  flex-direction: row;
 }
 
 .main-header {
