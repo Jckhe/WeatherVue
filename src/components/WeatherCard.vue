@@ -265,7 +265,7 @@ export default {
 <style>
 .weather-card-container {
   background-color: transparent !important;
-  height: 74vh;
+  height: 76vh;
   display: flex;
   flex-direction: column;
   align-items: center;

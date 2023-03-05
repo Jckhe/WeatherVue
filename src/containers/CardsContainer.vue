@@ -18,6 +18,14 @@ export default {
       return currentHourStart;
     },
   },
+  methods: {
+    prevSlide() {
+      this.$refs.carousel.prev();
+    },
+    nextSlide() {
+      this.$refs.carousel.next();
+    },
+  },
   watch: {
     weatherCards: {
       handler() {
@@ -49,6 +57,16 @@ export default {
       ref="carousel"
       :after-change="onChange"
     >
+      <template #prevArrow>
+        <div class="custom-slick-arrow">
+          <left-circle-outlined />
+        </div>
+      </template>
+      <template #nextArrow>
+        <div class="custom-slick-arrow">
+          <right-circle-outlined />
+        </div>
+      </template>
       <WeatherCard
         v-for="(item, index) in weatherCards"
         :cityName="item.cityName"
@@ -58,7 +76,9 @@ export default {
         :key="index"
       />
       <div id="search-carousel">
-        <SearchInput />
+        <div id="inner-search-container">
+          <SearchInput />
+        </div>
       </div>
     </a-carousel>
   </div>
@@ -66,10 +86,20 @@ export default {
 
 <style>
 #search-carousel {
-  width: 120%;
+  width: 90%;
+  height: 75vh;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
+  overflow: hidden;
+}
+
+#inner-search-container {
+  height: fit-content;
+  margin-top: 52.5%;
+  width: 100%;
+  margin-left: 5%;
 }
 .carousel-container {
   width: 100%;
@@ -83,5 +113,15 @@ export default {
   background: #364d79;
   overflow: hidden;
   z-index: 100;
+}
+
+.ant-carousel :deep(.slick-arrow.custom-slick-arrow) {
+  width: 25px;
+  height: 25px;
+  font-size: 25px;
+  color: #fff;
+  background-color: rgba(31, 45, 61, 0.11);
+  opacity: 0.3;
+  z-index: 40;
 }
 </style>
