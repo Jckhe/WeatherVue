@@ -10,6 +10,13 @@ export default {
   },
   computed: {
     ...mapState(["weatherCards"]),
+    currentHour() {
+      const now = new Date();
+      const currentHourStart =
+        (Math.floor(now.getTime() / (60 * 60 * 1000)) * (60 * 60 * 1000)) /
+        1000;
+      return currentHourStart;
+    },
   },
   watch: {
     weatherCards: {
@@ -47,6 +54,7 @@ export default {
         :cityName="item.cityName"
         :stateName="item.stateName"
         :weatherData="item.data"
+        :currentHour="currentHour"
         :key="index"
       />
       <div id="search-carousel">

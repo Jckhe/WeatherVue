@@ -2,10 +2,20 @@
 import HourlyWeatherCard from "./HourlyWeatherCard.vue";
 import { getWeatherSvg } from "@/helper/getWeatherSvg";
 import { weatherSVG } from "@/helper/weatherSvg";
+import {
+  DoubleLeftOutlined,
+  DoubleRightOutlined,
+  LeftOutlined,
+  RightOutlined,
+} from "@ant-design/icons-vue";
 export default {
   name: "WeatherCard",
   components: {
     HourlyWeatherCard,
+    DoubleLeftOutlined,
+    DoubleRightOutlined,
+    LeftOutlined,
+    RightOutlined,
   },
   props: {
     cityName: {
@@ -20,10 +30,50 @@ export default {
       type: Object,
       required: true,
     },
+    currentHour: {
+      type: Number,
+      required: true,
+    },
   },
   methods: {
     setWeatherSvg(weatherCode) {
       return weatherSVG(getWeatherSvg(weatherCode));
+    },
+    scrollFarLeft() {
+      const hourlyContainer = document.querySelector(
+        ".carousel-hourly-container"
+      );
+      hourlyContainer.scrollBy({
+        left: -550,
+        behavior: "smooth",
+      });
+    },
+    scrollFarRight() {
+      const hourlyContainer = document.querySelector(
+        ".carousel-hourly-container"
+      );
+      hourlyContainer.scrollBy({
+        left: 550,
+        behavior: "smooth",
+      });
+    },
+    scrollLeft() {
+      const hourlyContainer = document.querySelector(
+        ".carousel-hourly-container"
+      );
+      hourlyContainer.scrollBy({
+        left: -200,
+        behavior: "smooth",
+      });
+    },
+    scrollRight() {
+      const hourlyContainer = document.querySelector(
+        ".carousel-hourly-container"
+      );
+      hourlyContainer.scrollBy({
+        left: 200,
+        behavior: "smooth",
+      });
     },
   },
   computed: {
@@ -45,13 +95,20 @@ export default {
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
         .join(" ");
     },
+    weatherLowHigh() {
+      return this.weatherData.daily[0].temp;
+    },
     currentTemperature() {
       console.log("current temp: ", this.weatherData.current.temp);
       return `${this.weatherData.current.temp}° F`;
     },
     hourlyWeatherData() {
-      console.log("hourly:", this.weatherData.hourly);
-      return this.weatherData.hourly;
+      const sorted = this.weatherData.hourly.filter(
+        (item) => item.dt >= this.currentHour
+      );
+      console.log("this Hour: ", this.currentHour);
+      console.log("sorted: ", sorted);
+      return sorted;
     },
     titleStyle() {
       return {
@@ -62,34 +119,6 @@ export default {
       return {
         color: "white",
         border: "none",
-      };
-    },
-    testData() {
-      return {
-        dt: 1677690000,
-        temp: 50.72,
-        feels_like: 48.78,
-        pressure: 1009,
-        humidity: 70,
-        dew_point: 41.31,
-        uvi: 1.08,
-        clouds: 89,
-        visibility: 10000,
-        wind_speed: 15.66,
-        wind_deg: 254,
-        wind_gust: 21.88,
-        weather: [
-          {
-            id: 500,
-            main: "Rain",
-            description: "light rain",
-            icon: "10d",
-          },
-        ],
-        pop: 1,
-        rain: {
-          "1h": 0.12,
-        },
       };
     },
   },
@@ -118,7 +147,6 @@ export default {
       <a-tab-pane key="current" tab="Current">
         <a-card
           class="current-weather-container"
-          hoverable
           :headStyle="titleStyleNoBorder"
           :bordered="false"
         >
@@ -131,6 +159,10 @@ export default {
             />
             <h3>{{ currentTemperature }}</h3>
             <h3>{{ weatherDescription }}</h3>
+            <div class="min-max-container">
+              <span>Low: {{ weatherLowHigh.min }}°F</span>
+              <span>High: {{ weatherLowHigh.max }}°F</span>
+            </div>
           </div>
         </a-card>
       </a-tab-pane>
@@ -141,12 +173,30 @@ export default {
           :headStyle="titleStyleNoBorder"
           :bordered="false"
         >
-          <div class="inner-hourly-container">
-            <HourlyWeatherCard
-              v-for="(item, index) in hourlyWeatherData"
-              :weatherData="item"
-              :key="index"
-            />
+          <div class="scroll-buttons">
+            <a-button @click="scrollFarLeft"
+              ><template #icon><double-left-outlined /></template
+            ></a-button>
+            <a-button @click="scrollLeft"
+              ><template #icon><left-outlined /></template
+            ></a-button>
+            <a-button @click="scrollRight"
+              ><template #icon><right-outlined /></template
+            ></a-button>
+            <a-button @click="scrollFarRight"
+              ><template #icon><double-right-outlined /></template
+            ></a-button>
+          </div>
+          <div class="carousel-hourly-outer-container">
+            <div class="carousel-hourly-container">
+              <HourlyWeatherCard
+                v-for="(item, index) in hourlyWeatherData.slice(0, 24)"
+                :weatherData="item"
+                :timestamp="item.dt"
+                :temperature="item.temp"
+                :key="index"
+              />
+            </div>
           </div>
         </a-card>
       </a-tab-pane>
@@ -160,7 +210,7 @@ export default {
 <style>
 .weather-card-container {
   background-color: transparent !important;
-  height: 73vh;
+  height: 75vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -169,14 +219,18 @@ export default {
 
 .current-weather-container {
   background-color: transparent !important;
-  border: 1px solid grey;
-  border-radius: 15%;
+  border: 0.5px solid rgba(128, 128, 128, 0.5);
+  border-radius: 2%;
+  cursor: pointer;
 }
 
 .hourly-weather-container {
   background-color: transparent !important;
   border: 1px solid grey;
-  border-radius: 15%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .inner-current-weather-container {
@@ -191,13 +245,59 @@ export default {
   color: white;
 }
 
-.inner-hourly-container {
+.carousel-hourly-outer-container {
+  border: 1px solid red;
+  min-width: 27.5vw;
+  max-width: 27.5vw;
+  padding: 5%;
+}
+
+.carousel-hourly-container {
   border: 1px solid green;
   width: 100%;
-  min-height: 100%;
+  min-height: 27vh;
+  gap: 1vh;
   display: flex;
   flex-direction: row;
-  overflow-x: scroll;
+  overflow-x: auto !important;
+  justify-content: center;
+  align-items: center;
+  padding-left: 1vw;
+  padding-right: 1vw;
+}
+
+.hourly-cards {
+  display: flex;
+  flex-direction: row;
+}
+
+.scroll-buttons {
+  width: 100%;
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  gap: 5%;
+  padding: 1%;
+}
+
+.min-max-container {
+  border: 1px solid rgba(190, 190, 190, 0.6);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 55%;
+}
+
+.min-max-container span {
+  color: white;
+}
+
+.carousel-hourly-container .hourly-weather-card-container:first-child {
+  margin-left: 550%;
+}
+
+.carousel-hourly-container .hourly-weather-card-container:last-child {
+  margin-right: 0.3vw;
 }
 
 .ant-tabs-nav {
