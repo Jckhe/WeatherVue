@@ -115,7 +115,6 @@ export default {
 <style>
 .text-input-container {
   display: flex;
-  position: relative;
   width: 90%;
 }
 

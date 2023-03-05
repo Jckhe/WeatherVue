@@ -30,6 +30,17 @@ export default {
       );
       return response.data;
     },
+    async getCoordinatesInformation({lat, lng}) {
+      console.log("params: ", {lat, lng})
+      const response = await axios.get(
+  `https://api.geocodify.com/v2/reverse?api_key=${
+    process.env.VUE_APP_GMAPS_KEY
+  }&lat=${lat}&lng=${lng}`
+);
+      const cityName = response.data.response.features[0].properties.locality;
+      const stateName = response.data.response.features[0].properties.region_a;
+      return {lat, lng, cityName, stateName};
+    },
     createWeatherCard(data) {
       this.$store.commit("addWeatherCard", data);
     },
@@ -37,9 +48,9 @@ export default {
   beforeMount() {
   // Retrieve weatherCards data from localStorage if it exists
   const weatherCards = localStorage.getItem('weatherCards');
-  if (weatherCards) {
-    const parsedWeatherCards = JSON.parse(weatherCards);
-    console.log("Exists: ", parsedWeatherCards);
+  const parsedWeatherCards = JSON.parse(weatherCards);
+  if (parsedWeatherCards && parsedWeatherCards.length > 0) {
+    console.log("exists: ", parsedWeatherCards);
     parsedWeatherCards.forEach( async (card) => {
       console.log("Card: ", card);
       let weatherData = await this.getWeather(card.coordinates)
@@ -51,6 +62,29 @@ export default {
         };
       this.createWeatherCard(weatherCard);
     });
+  } else {
+    navigator.geolocation.getCurrentPosition(
+     async position => {
+       const coordinates = await this.getCoordinatesInformation({lat:position.coords.latitude, lng: position.coords.longitude});
+       const weatherData = await this.getWeather(coordinates);
+       let weatherCard = {
+          cityName: coordinates.cityName,
+          stateName: coordinates.stateName,
+          data: weatherData,
+        };
+        this.createWeatherCard(weatherCard);
+        let weatherCardsLocalStorage =
+          JSON.parse(localStorage.getItem("weatherCards")) || [];
+        weatherCardsLocalStorage.push({ coordinates });
+        localStorage.setItem(
+          "weatherCards",
+          JSON.stringify(weatherCardsLocalStorage)
+        );
+     },
+     error => {
+       console.log(error.message);
+     },
+  )   
   }
 }
 };
