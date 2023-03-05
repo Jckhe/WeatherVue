@@ -59,7 +59,7 @@ watch: {
     <h1 class="main-header">Weather</h1>
     <h1 class="main-header" style="color: #3eaf7c">Vue</h1>
   </div>
-  <h3>{{ currentDate }}</h3>
+  <h3 style="color: white">{{ currentDate }}</h3>
   <div v-if="length < 1" class="search module">
       <SearchInput />
   </div>
