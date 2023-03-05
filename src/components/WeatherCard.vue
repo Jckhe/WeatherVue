@@ -7,6 +7,7 @@ import {
   DoubleRightOutlined,
   LeftOutlined,
   RightOutlined,
+  DeleteOutlined,
 } from "@ant-design/icons-vue";
 export default {
   name: "WeatherCard",
@@ -16,6 +17,7 @@ export default {
     DoubleRightOutlined,
     LeftOutlined,
     RightOutlined,
+    DeleteOutlined,
   },
   props: {
     cityName: {
@@ -34,6 +36,12 @@ export default {
       type: Number,
       required: true,
     },
+  },
+  data() {
+    return {
+      visible: false,
+      loading: false,
+    };
   },
   methods: {
     setWeatherSvg(weatherCode) {
@@ -74,6 +82,19 @@ export default {
         left: 200,
         behavior: "smooth",
       });
+    },
+    handleOk() {
+      this.$store.commit("deleteWeatherCard", {
+        lat: this.weatherData.lat,
+        lon: this.weatherData.lon,
+      });
+      this.visible = false;
+    },
+    showModal() {
+      this.visible = true;
+    },
+    handleCancel() {
+      this.visible = false;
     },
   },
   computed: {
@@ -132,6 +153,33 @@ export default {
     :bordered="false"
     class="weather-card-container"
   >
+    <a-modal
+      v-model:visible="visible"
+      title="Delete Confirmation"
+      @ok="handleOk"
+      width="20%"
+      centered
+      ref="modal"
+    >
+      <template #footer>
+        <a-button key="back" @click="handleCancel">Cancel</a-button>
+        <a-button
+          key="submit"
+          type="danger"
+          :loading="loading"
+          @click="handleOk"
+          >Delete</a-button
+        >
+      </template>
+      <p>Are you sure you want to delete this weather card?</p>
+    </a-modal>
+    <div class="delete-button-container">
+      <a-button @click="showModal" class="delete-button">
+        <template #icon>
+          <delete-outlined class="delete-button-svg" style="color: white" />
+        </template>
+      </a-button>
+    </div>
     <a-tabs
       v-model:selectedTab="current"
       :tabBarStyle="{
@@ -322,6 +370,24 @@ export default {
 
 .carousel-hourly-container .hourly-weather-card-container:last-child {
   margin-right: 0.3vw;
+}
+
+.delete-button-container {
+  position: absolute;
+  height: 0;
+  width: 0;
+}
+
+.delete-button {
+  color: white;
+  position: relative;
+  cursor: pointer;
+  left: 27.5vw;
+  background-color: transparent !important;
+}
+
+.delete-button-svg {
+  font-size: 1.5rem;
 }
 
 .ant-tabs-nav {
