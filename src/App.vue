@@ -10,15 +10,13 @@ export default {
     Background,
     MainModule,
   },
-  data() {
-    return {
-      checked1: false,
-    }
-  },
   computed: {
-    count() {
-      return this.$store.state.count;
-    }
+    currentDate() {
+    const date = new Date();
+    const options = { year: "numeric", month: "short", day: "numeric" };
+    const formattedDate = date.toLocaleDateString("en-US", options);
+    return formattedDate;
+  },
   },
   mounted() {
     document.title = 'WeatherVue | Jckhe';
@@ -93,6 +91,9 @@ export default {
 <template>
   <div class="main-container">
     <MainModule />
+    <div class="date-container">
+      <h3>{{ currentDate }}</h3>
+    </div>
     <Background />
   </div>
 </template>
@@ -114,6 +115,19 @@ export default {
   border: 1px solid black;
   height: 30%;
 }
+
+.date-container {
+  position: absolute;
+  bottom: 92.5%;
+  left: 87.5%;
+}
+
+.date-container h3 {
+  color: white;
+  position: relative;
+  font-size: 1.5rem;
+}
+
 body {
   margin: 0;
   padding: 0;

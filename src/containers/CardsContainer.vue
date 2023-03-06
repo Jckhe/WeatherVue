@@ -1,5 +1,6 @@
 <script>
 import { mapState } from "vuex";
+import { PlusCircleTwoTone } from "@ant-design/icons-vue";
 import WeatherCard from "@/components/WeatherCard.vue";
 import SearchInput from "@/components/Search.vue";
 export default {
@@ -7,6 +8,12 @@ export default {
   components: {
     WeatherCard,
     SearchInput,
+    PlusCircleTwoTone,
+  },
+  data() {
+    return {
+      isLastSlide: false,
+    };
   },
   computed: {
     ...mapState(["weatherCards"]),
@@ -25,6 +32,16 @@ export default {
     nextSlide() {
       this.$refs.carousel.next();
     },
+    gotoSearch() {
+      this.$refs.carousel.goTo(this.weatherCards.length, false);
+    },
+    onChange(current) {
+      if (this.weatherCards.length === current) {
+        this.isLastSlide = true;
+      } else {
+        this.isLastSlide = false;
+      }
+    },
   },
   watch: {
     weatherCards: {
@@ -38,35 +55,25 @@ export default {
       deep: true,
     },
   },
-  setup() {
-    const onChange = (current) => {
-      console.log(current);
-    };
-
-    return {
-      onChange,
-    };
-  },
 };
 </script>
 
 <template>
   <div class="carousel-container">
+    <div
+      v-if="!isLastSlide"
+      :key="isLastSlide"
+      class="goto-search-container"
+      shape="round"
+      @click="gotoSearch"
+    >
+      <plus-circle-two-tone />
+    </div>
     <a-carousel
       :key="weatherCards.length"
       ref="carousel"
       :after-change="onChange"
     >
-      <template #prevArrow>
-        <div class="custom-slick-arrow">
-          <left-circle-outlined />
-        </div>
-      </template>
-      <template #nextArrow>
-        <div class="custom-slick-arrow">
-          <right-circle-outlined />
-        </div>
-      </template>
       <WeatherCard
         v-for="(item, index) in weatherCards"
         :cityName="item.cityName"
@@ -123,5 +130,20 @@ export default {
   background-color: rgba(31, 45, 61, 0.11);
   opacity: 0.3;
   z-index: 40;
+}
+
+.goto-search-container {
+  position: absolute;
+  left: 2%;
+  top: 2%;
+  font-size: 1.5rem;
+  color: black;
+  cursor: pointer !important;
+  z-index: 33;
+}
+
+.goto-search-container:hover {
+  transform: scale(1.1);
+  transition: all 0.25s ease-in-out;
 }
 </style>
