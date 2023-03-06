@@ -2,6 +2,7 @@
 <script>
 import Background from './containers/Background.vue';
 import MainModule from './containers/MainModule.vue';
+import FooterIcons from './components/FooterIcons.vue';
 import axios from 'axios';
 
 export default {
@@ -9,6 +10,7 @@ export default {
   components: {
     Background,
     MainModule,
+    FooterIcons,
   },
   computed: {
     currentDate() {
@@ -94,6 +96,7 @@ export default {
     <div class="date-container">
       <h3>{{ currentDate }}</h3>
     </div>
+    <FooterIcons />
     <Background />
   </div>
 </template>
