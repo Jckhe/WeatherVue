@@ -4,7 +4,6 @@ import App from "./App.vue";
 import store from "./store";
 import Particles from "vue3-particles";
 import Antd from "ant-design-vue";
-import "ant-design-vue/dist/antd.css";
 import "./stylesheet.css";
 
 const app = createApp(App);

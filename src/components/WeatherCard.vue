@@ -159,6 +159,7 @@ export default {
       @ok="handleOk"
       width="20%"
       centered
+      :closable="false"
       ref="modal"
     >
       <template #footer>
@@ -384,6 +385,10 @@ export default {
   cursor: pointer;
   left: 27.5vw;
   background-color: transparent !important;
+}
+
+.deleteModal {
+  background-color: rgb(50, 50, 50) !important;
 }
 
 .delete-button-svg {
